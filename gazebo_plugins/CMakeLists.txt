@@ -197,7 +197,7 @@ endif()
 
 
 # gazebo_ros_ray_sensor
-add_library(gazebo_ros_ray_sensor SHARED
+add_library(gazebo_ros_ray_sensor STATIC
   src/gazebo_ros_ray_sensor.cpp
 )
 target_include_directories(gazebo_ros_ray_sensor PUBLIC include)
