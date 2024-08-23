@@ -81,7 +81,7 @@ ament_target_dependencies(gazebo_ros_utils
 ament_export_libraries(gazebo_ros_utils)
 
 # gazebo_ros_init
-add_library(gazebo_ros_init SHARED
+add_library(gazebo_ros_init STATIC
   src/gazebo_ros_init.cpp
 )
 ament_target_dependencies(gazebo_ros_init
