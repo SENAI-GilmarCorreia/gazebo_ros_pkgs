@@ -3,7 +3,7 @@ project(gazebo_plugins)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD 17)
 endif()
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   # we dont use add_compile_options with pedantic in message packages
@@ -38,6 +38,7 @@ find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(trajectory_msgs REQUIRED)
+find_package(Protobuf REQUIRED)
 
 link_directories(${gazebo_dev_LIBRARY_DIRS})
 
@@ -197,10 +198,12 @@ endif()
 
 
 # gazebo_ros_ray_sensor
-add_library(gazebo_ros_ray_sensor STATIC
+add_library(gazebo_ros_ray_sensor SHARED
   src/gazebo_ros_ray_sensor.cpp
 )
-target_include_directories(gazebo_ros_ray_sensor PUBLIC include)
+
+target_include_directories(gazebo_ros_ray_sensor PUBLIC include ${Protobuf_INCLUDE_DIRS})
+#target_link_libraries(gazebo_ros_ray_sensor ${Protobuf_LIBRARIES})
 ament_target_dependencies(gazebo_ros_ray_sensor
   "gazebo_ros"
   "sensor_msgs"

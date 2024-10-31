@@ -3,7 +3,7 @@ project(gazebo_ros)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD 17)
 endif()
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   # we dont use add_compile_options with pedantic in message packages
@@ -31,6 +31,7 @@ find_package(rclcpp REQUIRED)
 find_package(rmw REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(tinyxml_vendor REQUIRED)
+find_package(Protobuf REQUIRED)
 
 link_directories(
   ${gazebo_dev_LIBRARY_DIRS}
@@ -81,9 +82,17 @@ ament_target_dependencies(gazebo_ros_utils
 ament_export_libraries(gazebo_ros_utils)
 
 # gazebo_ros_init
-add_library(gazebo_ros_init STATIC
+add_library(gazebo_ros_init SHARED
   src/gazebo_ros_init.cpp
 )
+
+target_include_directories(gazebo_ros_init
+  PUBLIC
+    ${Protobuf_INCLUDE_DIRS}
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
 ament_target_dependencies(gazebo_ros_init
   "builtin_interfaces"
   "gazebo_dev"
@@ -91,9 +100,13 @@ ament_target_dependencies(gazebo_ros_init
   "rclcpp"
   "std_srvs"
 )
+
 target_link_libraries(gazebo_ros_init
   gazebo_ros_node
   gazebo_ros_utils
+  "C:/vcpkg/installed/x64-windows/lib/libprotobuf.lib"
+  #"C:/vcpkg/installed/x64-windows/bin/libprotobuf-lite.dll"
+  #${Protobuf_LIBRARIES}
 )
 ament_export_libraries(gazebo_ros_init)
 
